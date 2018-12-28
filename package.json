@@ -1,0 +1,30 @@
+{
+  "name": "batchsendtransactions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/task"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "any-promise": "^1.3.0",
+    "eth-ens-namehash": "^2.0.8",
+    "eth-lib": "^0.2.8",
+    "ethjs-unit": "^0.1.6",
+    "eventemitter3": "^3.1.0",
+    "oboe": "^2.1.4",
+    "randomhex": "^0.1.5",
+    "swarm-js": "^0.1.39",
+    "underscore": "^1.9.1",
+    "utf8": "^3.0.0",
+    "web3": "git+https://github.com/liujett/web3.js.git#Tag35",
+    "web3-eth-contract": "^1.0.0-beta.37",
+    "websocket": "^1.0.28",
+    "winston": "^3.1.0",
+    "winston-daily-rotate-file": "^3.5.1",
+    "xhr2-cookies": "^1.1.0"
+  }
+}
