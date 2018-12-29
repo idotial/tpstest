@@ -2,7 +2,7 @@ var Web3 = require('web3');
 const execFile = require('child_process').execFile;
 var accounts = require('../config/accounts')
 var nodes = require('../config/nodes')
-var web3 = new Web3(nodes[1].url);
+var web3 = new Web3(nodes[0].url);
 
 const PowerLimit = 1509715260000000
 
