@@ -62,7 +62,7 @@ class RepeatBatchSendCoin {
 
   async start() {
     await this.refreshAvailbleAddress()
-    for (let address of accounts) {
+    for (let address of accounts.keys()) {
       await this.refreshNonce(address)
     }
     console.log(this.power);
