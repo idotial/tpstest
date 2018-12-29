@@ -28,8 +28,8 @@ accounts.set('0xa5E79a01056Fe58Fb1Cd21e2a3e7327Fb6110c6A', '0x3a56da2e7e759a2fd3
 //   console.log(`accounts.set('${accounts[i].address}', '${accounts[i].privateKey}')`);
 // }
 
-for (address of accounts.keys()) {
-  console.log(address);
-}
+// for (address of accounts.keys()) {
+//   console.log(address);
+// }
 
 module.exports = accounts;
