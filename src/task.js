@@ -15,7 +15,7 @@ class RepeatBatchSendCoin {
   }
 
   async refreshAvailbleAddress() {
-    for(address of accounts.keys()) {
+    for(let address of accounts.keys()) {
       let power = await web3.eth.getPower(address);
       this.power.set(address, power);
       if (power < PowerLimit) {
@@ -45,7 +45,7 @@ class RepeatBatchSendCoin {
 
   async sendcoin() {
     let batch = new web3.eth.BatchRequest()
-    for (address of this.availbleAccounts) {
+    for (let address of this.availbleAccounts) {
       let txObject = await web3.eth.accounts.signTransaction({
         to: '0x0b4e0E04FD8b6b9a14dBD9Cb7D238E9f231368FC',
         // to:'0xb41b3986c377A8F914BF0A6DA54B6F7a60610819',
@@ -62,7 +62,7 @@ class RepeatBatchSendCoin {
 
   async start() {
     await this.refreshAvailbleAddress()
-    for (address of accounts) {
+    for (let address of accounts) {
       await this.refreshNonce(address)
     }
     console.log(this.power);
