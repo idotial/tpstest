@@ -1,7 +1,8 @@
 var Web3 = require('web3');
+const execFile = require('child_process').execFile;
 var accounts = require('../config/accounts')
 var nodes = require('../config/nodes')
-var web3 = new Web3(new Web3.providers.WebsocketProvider(nodes[1].url));
+var web3 = new Web3(nodes[1].url);
 
 const PowerLimit = 1509715260000000
 
@@ -24,13 +25,25 @@ class RepeatBatchSendCoin {
     }
   }
 
+  checkNode() {
+    const ls = execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status']);
+    ls.stdout.on('data', (data) => {
+      if (data.pending + data.queued > 700) {
+        clearInterval(this.intervalId)
+        this.intervalId = null;
+      } else if (this.intervalId == null) {
+        this.intervalId = setInterval(this.sendcoin.bind(this), interval)
+      }
+    });
+  }
+
   refreshNonce(address) {
     let nonce = await web3.eth.getTransactionCount(address);
     this.nonce.set(address, nonce);
   }
 
   async sendcoin() {
-    var batch = new web3.eth.BatchRequest()
+    let batch = new web3.eth.BatchRequest()
     for (address of this.availbleAccounts) {
       let txObject = await web3.eth.accounts.signTransaction({
         to: '0x0b4e0E04FD8b6b9a14dBD9Cb7D238E9f231368FC',
@@ -53,7 +66,8 @@ class RepeatBatchSendCoin {
     }
     console.log(this.power);
     console.log(this.nonce);
-    setInterval(this.refreshAvailbleAddress.bind(this), 3000)
+    // setInterval(this.refreshAvailbleAddress.bind(this), 2000)
+    // setInterval(this.checkNode.bind(this), 2000)
     // setInterval(this.sendcoin.bind(this), 0)
     // this.intervalId = setInterval(this.sendcoin.bind(this), interval)
   }
