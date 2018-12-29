@@ -1,5 +1,5 @@
 const { spawn } = require('child_process');
-const ls = spawn('/root/go-etherzero/build/bin/geth', ['attach --datadir /data/node1 --exec  txpool.content']);
+const ls = spawn(`/root/go-etherzero/build/bin/geth attach --datadir /data/node1 --exec  txpool.status`);
 
 ls.stdout.on('data', (data) => {
   console.log(`stdout: ${data}`);
