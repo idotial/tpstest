@@ -13,7 +13,7 @@ class RepeatBatchSendCoin {
     this.nonce = new Map();
   }
 
-  refreshAvailbleAddress() {
+  async refreshAvailbleAddress() {
     for(address of accounts.keys()) {
       let power = await web3.eth.getPower(address);
       this.power.set(address, power);
@@ -37,7 +37,7 @@ class RepeatBatchSendCoin {
     });
   }
 
-  refreshNonce(address) {
+  async refreshNonce(address) {
     let nonce = await web3.eth.getTransactionCount(address);
     this.nonce.set(address, nonce);
   }
