@@ -30,28 +30,35 @@ class RepeatBatchSendCoin {
   }
 
   checkNode() {
-    const ls = execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status']);
-    ls.stdout.on('data', (data) => {
-      try {
-        data = eval('(' + data + ')')
-        if (data.pending + data.queued > 2000) {
-          if (this.intervalId != null) {
-            clearInterval(this.intervalId)
-            this.intervalId = null;
-            taskLogger.info('task stop');
-          }
-        } else if (this.intervalId == null) {
-          taskLogger.info('task restart');
-          this.intervalId = setInterval(this.sendcoin.bind(this), 100)
-        }
-      } catch (e) {
-        taskLogger.error(e.toString());
-        taskLogger.error(data.toString());
-        if (this.intervalId != null) {
-          clearInterval(this.intervalId)
-          this.intervalId = null;
-          taskLogger.info('task stop');
-        }
+    // const geth = execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status']);
+    // geth.stdout.on('data', (data) => {
+    //   try {
+    //     data = eval('(' + data + ')')
+    //     if (data.pending + data.queued > 2000) {
+    //       if (this.intervalId != null) {
+    //         clearInterval(this.intervalId)
+    //         this.intervalId = null;
+    //         taskLogger.info('task stop');
+    //       }
+    //     } else if (this.intervalId == null) {
+    //       taskLogger.info('task restart');
+    //       this.intervalId = setInterval(this.sendcoin.bind(this), 100)
+    //     }
+    //   } catch (e) {
+    //     taskLogger.error(e.toString());
+    //     taskLogger.error(data.toString());
+    //     if (this.intervalId != null) {
+    //       clearInterval(this.intervalId)
+    //       this.intervalId = null;
+    //       taskLogger.info('task stop');
+    //     }
+    //   }
+    // });
+    const geth = execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status'], (error, stdout, stderr) => {
+      if (error) {
+        taskError.error(error);
+      } else {
+        console.log(stdout);
       }
     });
   }
@@ -70,7 +77,7 @@ class RepeatBatchSendCoin {
             to: '0x7cB5761e153CC39d618DE6D074C2a199B109671f',
             value: '1',
             chainId: '123',
-            gas: '210000', 
+            gas: '210000',
             gasPrice:'1000000000',
             nonce: this.nonce.get(address),
           },accounts.get(address))
