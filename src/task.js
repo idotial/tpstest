@@ -6,7 +6,7 @@ var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
 const PowerLimit = 2509715260000000
-const transPerBatch = 2
+const transPerBatch = 4
 
 class RepeatBatchSendCoin {
   constructor (){
