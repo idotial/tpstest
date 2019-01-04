@@ -64,7 +64,7 @@ class RepeatBatchSendCoin {
   }
 
   async start() {
-    sendcoin()
+    this.sendcoin()
   }
 }
 
