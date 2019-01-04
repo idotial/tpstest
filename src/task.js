@@ -33,7 +33,7 @@ class RepeatBatchSendCoin {
     ls.stdout.on('data', (data) => {
       try {
         data = eval('(' + data + ')')
-        if (data.pending + data.queued > 2000) {
+        if (data.pending + data.queued > 2000 && this.intervalId != null) {
           clearInterval(this.intervalId)
           this.intervalId = null;
           console.log('task stop');
