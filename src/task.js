@@ -31,14 +31,19 @@ class RepeatBatchSendCoin {
   checkNode() {
     const ls = execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status']);
     ls.stdout.on('data', (data) => {
-      data = eval('(' + data + ')')
-      if (data.pending + data.queued > 2000) {
-        clearInterval(this.intervalId)
-        this.intervalId = null;
-        console.log('task stop');
-      } else if (this.intervalId == null) {
-        console.log('task restart');
-        this.intervalId = setInterval(this.sendcoin.bind(this), 100)
+      try {
+        data = eval('(' + data + ')')
+        if (data.pending + data.queued > 2000) {
+          clearInterval(this.intervalId)
+          this.intervalId = null;
+          console.log('task stop');
+        } else if (this.intervalId == null) {
+          console.log('task restart');
+          this.intervalId = setInterval(this.sendcoin.bind(this), 100)
+        }
+      } catch (e) {
+        console.log(e);
+        console.log(data);
       }
     });
   }
