@@ -59,7 +59,7 @@ class RepeatBatchSendCoin {
             chainId: '123',
             gas: '210000', //100个地址的话差不多时两百万左右，具体可以测试的时候看下交易的gas used做调整
             gasPrice:'1000000000',
-            nonce: this.nonce[i]++,
+            nonce: this.nonce.set(address, this.nonce.get(address)+1),
           },accounts.get(address))
           this.sended ++;
           console.log('sended: ', this.sended);
@@ -78,6 +78,7 @@ class RepeatBatchSendCoin {
     for (let address of accounts.keys()) {
       await this.refreshNonce(address)
     }
+    await this.refreshAvailbleAddress()
     // console.log(this.power);
     // console.log(this.nonce);
     setInterval(this.checkNode.bind(this), 2000)
