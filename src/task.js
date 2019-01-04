@@ -32,7 +32,7 @@ class RepeatBatchSendCoin {
   checkNode() {
     const ls = execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status']);
     ls.stdout.on('end', (data) => {
-      console.log(data);
+      console.log('end',new Buffer(data,'utf-8').toString());
       try {
         data = eval('(' + data + ')')
         if (data.pending + data.queued > 2000) {
