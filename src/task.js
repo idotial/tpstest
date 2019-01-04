@@ -43,8 +43,8 @@ class RepeatBatchSendCoin {
           this.intervalId = setInterval(this.sendcoin.bind(this), 100)
         }
       } catch (e) {
-        taskLogger.error(e);
-        taskLogger.error(data);
+        taskLogger.error(e.toString());
+        taskLogger.error(data.toString());
       }
     });
   }
@@ -70,11 +70,11 @@ class RepeatBatchSendCoin {
           },accounts.get(address))
           this.nonce.set(address, this.nonce.get(address)+1),
           this.sended ++;
-          taskLogger.info('sended: ', this.sended);
+          taskLogger.info('sended: '+this.sended);
           //"0xf86580843b9aca008303345094b41b3986c377a8f914bf0a6da54b6f7a60610819018081d8a02e06a377269bbfd14e39b4b41caaf199e15ef190cf8f4897bd90e8bc8c2cd485a04e4084014386b6b8c49bb18e3977e0cc58180b8ebe1575e660c3957e4fb636ff"
           batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
         } catch (e) {
-          taskLogger.error(e);
+          taskLogger.error(e.toString());
         }
       }
     }
