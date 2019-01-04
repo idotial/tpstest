@@ -47,6 +47,11 @@ class RepeatBatchSendCoin {
       } catch (e) {
         taskLogger.error(e.toString());
         taskLogger.error(data.toString());
+        if (this.intervalId != null) {
+          clearInterval(this.intervalId)
+          this.intervalId = null;
+          taskLogger.info('task stop');
+        }
       }
     });
   }
