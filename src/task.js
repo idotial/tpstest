@@ -30,30 +30,6 @@ class RepeatBatchSendCoin {
   }
 
   checkNode() {
-    // const geth = execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status']);
-    // geth.stdout.on('data', (data) => {
-    //   try {
-    //     data = eval('(' + data + ')')
-        // if (data.pending + data.queued > 2000) {
-        //   if (this.intervalId != null) {
-        //     clearInterval(this.intervalId)
-        //     this.intervalId = null;
-        //     taskLogger.info('task stop');
-        //   }
-        // } else if (this.intervalId == null) {
-        //   taskLogger.info('task restart');
-        //   this.intervalId = setInterval(this.sendcoin.bind(this), 100)
-        // }
-    //   } catch (e) {
-    //     taskLogger.error(e.toString());
-    //     taskLogger.error(data.toString());
-    //     if (this.intervalId != null) {
-    //       clearInterval(this.intervalId)
-    //       this.intervalId = null;
-    //       taskLogger.info('task stop');
-    //     }
-    //   }
-    // });
     const geth = execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status'], (error, stdout, stderr) => {
       if (error) {
         taskError.error(error);
