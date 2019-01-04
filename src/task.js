@@ -34,10 +34,12 @@ class RepeatBatchSendCoin {
     ls.stdout.on('data', (data) => {
       try {
         data = eval('(' + data + ')')
-        if (data.pending + data.queued > 2000 && this.intervalId != null) {
-          clearInterval(this.intervalId)
-          this.intervalId = null;
-          taskLogger.info('task stop');
+        if (data.pending + data.queued > 2000) {
+          if (this.intervalId != null) {
+            clearInterval(this.intervalId)
+            this.intervalId = null;
+            taskLogger.info('task stop');
+          }
         } else if (this.intervalId == null) {
           taskLogger.info('task restart');
           this.intervalId = setInterval(this.sendcoin.bind(this), 100)
