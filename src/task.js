@@ -6,7 +6,7 @@ var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
 const PowerLimit = 2509715260000000
-const transPerBatch = 1
+const transPerBatch = 2
 
 class RepeatBatchSendCoin {
   constructor (){
@@ -38,7 +38,7 @@ class RepeatBatchSendCoin {
         console.log('task stop');
       } else if (this.intervalId == null) {
         console.log('task restart');
-        this.intervalId = setInterval(this.sendcoin.bind(this), 10)
+        this.intervalId = setInterval(this.sendcoin.bind(this), 100)
       }
     });
   }
