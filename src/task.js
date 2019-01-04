@@ -86,10 +86,10 @@ class RepeatBatchSendCoin {
     for (let address of accounts.keys()) {
       await this.refreshNonce(address)
     }
-    console.log(this.nonce);
-    // await this.refreshAvailbleAddress()
-    // setInterval(this.checkNode.bind(this), 1000)
-    // setInterval(this.refreshAvailbleAddress.bind(this), 2000)
+    // console.log(this.nonce);
+    await this.refreshAvailbleAddress()
+    setInterval(this.refreshAvailbleAddress.bind(this), 1000)
+    setInterval(this.checkNode.bind(this), 1000)
     // this.intervalId = setInterval(this.sendcoin.bind(this), interval)
   }
 }
