@@ -32,7 +32,7 @@ class RepeatBatchSendCoin {
     const ls = execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status']);
     ls.stdout.on('data', (data) => {
       data = eval('(' + data + ')')
-      if (data.pending + data.queued > 700) {
+      if (data.pending + data.queued > 1500) {
         clearInterval(this.intervalId)
         this.intervalId = null;
         console.log('task stop');
