@@ -36,7 +36,7 @@ class RepeatBatchSendCoin {
         this.intervalId = null;
         console.log('task stop');
       } else if (this.intervalId == null) {
-        console.log(task restart);
+        console.log('task restart');
         this.intervalId = setInterval(this.sendcoin.bind(this), 1000)
       }
     });
