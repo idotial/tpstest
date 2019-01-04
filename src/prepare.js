@@ -55,12 +55,14 @@ class RepeatBatchSendCoin {
           value: '10000000000000000000000000',
           gas: '210000', //100个地址的话差不多时两百万左右，具体可以测试的时候看下交易的gas used做调整
           gasPrice:'1000000000',
-          nonce: this.nonce++,
+          // nonce: this.nonce++,
+          nonce: 0,
         },baseprivate)
-        web3.eth.sendSignedTransaction(txObject.rawTransaction)
-        .once('transactionHash', console.log)
-        .once('confirmation', console.log)
-        .once('error', console.log)
+        console.log(txObject.rawTransaction);
+        // web3.eth.sendSignedTransaction(txObject.rawTransaction)
+        // .once('transactionHash', console.log)
+        // .once('confirmation', console.log)
+        // .once('error', console.log)
         //"0xf86580843b9aca008303345094b41b3986c377a8f914bf0a6da54b6f7a60610819018081d8a02e06a377269bbfd14e39b4b41caaf199e15ef190cf8f4897bd90e8bc8c2cd485a04e4084014386b6b8c49bb18e3977e0cc58180b8ebe1575e660c3957e4fb636ff"
         // batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
     }
@@ -68,7 +70,8 @@ class RepeatBatchSendCoin {
   }
 
   async start() {
-    this.sendcoin()
+    await this.refreshNonce(addrBase)
+    // this.sendcoin()
   }
 }
 
