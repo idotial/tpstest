@@ -56,8 +56,7 @@ class RepeatBatchSendCoin {
           value: '10000000000000000000000000',
           gas: '210000', //100个地址的话差不多时两百万左右，具体可以测试的时候看下交易的gas used做调整
           gasPrice:'1000000000',
-          // nonce: this.nonce++,
-          nonce: 0,
+          nonce: this.nonce++,
         },baseprivate)
         console.log(txObject.rawTransaction);
         // web3.eth.sendSignedTransaction(txObject.rawTransaction)
@@ -72,7 +71,7 @@ class RepeatBatchSendCoin {
 
   async start() {
     await this.refreshNonce(addrBase)
-    // this.sendcoin()
+    await this.sendcoin()
   }
 }
 
