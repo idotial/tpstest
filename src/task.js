@@ -34,8 +34,10 @@ class RepeatBatchSendCoin {
       if (data.pending + data.queued > 700) {
         clearInterval(this.intervalId)
         this.intervalId = null;
+        console.log('task stop');
       } else if (this.intervalId == null) {
-        this.intervalId = setInterval(this.sendcoin.bind(this), 10)
+        console.log(task restart);
+        this.intervalId = setInterval(this.sendcoin.bind(this), 1000)
       }
     });
   }
@@ -49,19 +51,23 @@ class RepeatBatchSendCoin {
     let batch = new web3.eth.BatchRequest()
     for (let address of this.availbleAccounts) {
       for (let i = 0; i < transPerBatch; i++) {
-        let txObject = await web3.eth.accounts.signTransaction({
-          to: '0x7cB5761e153CC39d618DE6D074C2a199B109671f',
-          // to:'0xb41b3986c377A8F914BF0A6DA54B6F7a60610819',
-          value: '1',
-          chainId: '123',
-          gas: '210000', //100个地址的话差不多时两百万左右，具体可以测试的时候看下交易的gas used做调整
-          gasPrice:'1000000000',
-          nonce: this.nonce[i]++,
-        },accounts.get(address))
-        this.sended ++;
-        console.log('sended: ', this.sended);
-        //"0xf86580843b9aca008303345094b41b3986c377a8f914bf0a6da54b6f7a60610819018081d8a02e06a377269bbfd14e39b4b41caaf199e15ef190cf8f4897bd90e8bc8c2cd485a04e4084014386b6b8c49bb18e3977e0cc58180b8ebe1575e660c3957e4fb636ff"
-        batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
+        try {
+          let txObject = await web3.eth.accounts.signTransaction({
+            to: '0x7cB5761e153CC39d618DE6D074C2a199B109671f',
+            // to:'0xb41b3986c377A8F914BF0A6DA54B6F7a60610819',
+            value: '1',
+            chainId: '123',
+            gas: '210000', //100个地址的话差不多时两百万左右，具体可以测试的时候看下交易的gas used做调整
+            gasPrice:'1000000000',
+            nonce: this.nonce[i]++,
+          },accounts.get(address))
+          this.sended ++;
+          console.log('sended: ', this.sended);
+          //"0xf86580843b9aca008303345094b41b3986c377a8f914bf0a6da54b6f7a60610819018081d8a02e06a377269bbfd14e39b4b41caaf199e15ef190cf8f4897bd90e8bc8c2cd485a04e4084014386b6b8c49bb18e3977e0cc58180b8ebe1575e660c3957e4fb636ff"
+          batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
+        } catch (e) {
+          console.log(e);
+        }
       }
     }
     batch.execute()
