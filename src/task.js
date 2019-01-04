@@ -5,7 +5,7 @@ var accounts = require('../config/accounts')
 var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
-const PowerLimit = 1509715260000000
+const PowerLimit = 2509715260000000
 const transPerBatch = 1
 
 class RepeatBatchSendCoin {
@@ -13,6 +13,7 @@ class RepeatBatchSendCoin {
     this.availbleAccounts = new Set();
     this.power = new Map();
     this.nonce = new Map();
+    this.sended = 0;
   }
 
   async refreshAvailbleAddress() {
@@ -34,7 +35,7 @@ class RepeatBatchSendCoin {
         clearInterval(this.intervalId)
         this.intervalId = null;
       } else if (this.intervalId == null) {
-        this.intervalId = setInterval(this.sendcoin.bind(this), interval)
+        this.intervalId = setInterval(this.sendcoin.bind(this), 10)
       }
     });
   }
@@ -49,13 +50,16 @@ class RepeatBatchSendCoin {
     for (let address of this.availbleAccounts) {
       for (let i = 0; i < transPerBatch; i++) {
         let txObject = await web3.eth.accounts.signTransaction({
-          to: '0x0b4e0E04FD8b6b9a14dBD9Cb7D238E9f231368FC',
+          to: '0x7cB5761e153CC39d618DE6D074C2a199B109671f',
           // to:'0xb41b3986c377A8F914BF0A6DA54B6F7a60610819',
           value: '1',
+          chainId: '123',
           gas: '210000', //100个地址的话差不多时两百万左右，具体可以测试的时候看下交易的gas used做调整
           gasPrice:'1000000000',
           nonce: this.nonce[i]++,
         },accounts.get(address))
+        this.sended ++;
+        console.log('sended: ', this.sended);
         //"0xf86580843b9aca008303345094b41b3986c377a8f914bf0a6da54b6f7a60610819018081d8a02e06a377269bbfd14e39b4b41caaf199e15ef190cf8f4897bd90e8bc8c2cd485a04e4084014386b6b8c49bb18e3977e0cc58180b8ebe1575e660c3957e4fb636ff"
         batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
       }
@@ -64,15 +68,14 @@ class RepeatBatchSendCoin {
   }
 
   async start() {
-    await this.refreshAvailbleAddress()
+    // await this.refreshAvailbleAddress()
     for (let address of accounts.keys()) {
       await this.refreshNonce(address)
     }
-    console.log(this.power);
-    console.log(this.nonce);
-    // setInterval(this.refreshAvailbleAddress.bind(this), 2000)
-    // setInterval(this.checkNode.bind(this), 2000)
-    // setInterval(this.sendcoin.bind(this), 0)
+    // console.log(this.power);
+    // console.log(this.nonce);
+    setInterval(this.checkNode.bind(this), 2000)
+    setInterval(this.refreshAvailbleAddress.bind(this), 2000)
     // this.intervalId = setInterval(this.sendcoin.bind(this), interval)
   }
 }
