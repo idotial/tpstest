@@ -58,7 +58,7 @@ class RepeatBatchSendCoin {
       if (error) {
         taskError.error(error);
       } else {
-        let data = eval('(' + data + ')')
+        let data = eval('(' + stdout + ')')
         console.log(data);
       }
     });
