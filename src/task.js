@@ -15,6 +15,7 @@ class RepeatBatchSendCoin {
     this.power = new Map();
     this.nonce = new Map();
     this.sended = 0;
+    this.isAvailble = true;
   }
 
   async refreshAvailbleAddress() {
@@ -37,21 +38,24 @@ class RepeatBatchSendCoin {
         try {
           let data = eval('(' + stdout + ')')
           if (data.pending + data.queued > 2000) {
-            if (this.intervalId != null) {
-              clearInterval(this.intervalId)
-              this.intervalId = null;
+            // if (this.intervalId != null) {
+            //   clearInterval(this.intervalId)
+            //   this.intervalId = null;
+            //   taskLogger.info('task stop');
+            // }
+            if (this.isAvailble) {
+              this.isAvailble = false;
               taskLogger.info('task stop');
             }
-          } else if (this.intervalId == null) {
+          } else if (!this.isAvailble) {
             taskLogger.info('task restart');
-            this.intervalId = setInterval(this.sendcoin.bind(this), 100)
+            this.isAvailble = true
           }
         } catch (e) {
             taskLogger.error(e.toString());
             taskLogger.error(data.toString());
-            if (this.intervalId != null) {
-              clearInterval(this.intervalId)
-              this.intervalId = null;
+            if (this.isAvailble) {
+              this.isAvailble = false;
               taskLogger.info('task stop');
             }
         }
@@ -65,28 +69,30 @@ class RepeatBatchSendCoin {
   }
 
   async sendcoin() {
-    let batch = new web3.eth.BatchRequest()
-    for (let address of this.availbleAccounts) {
-      for (let i = 0; i < transPerBatch; i++) {
-        try {
-          let txObject = await web3.eth.accounts.signTransaction({
-            to: '0x7cB5761e153CC39d618DE6D074C2a199B109671f',
-            value: '1',
-            chainId: '123',
-            gas: '210000',
-            gasPrice:'1000000000',
-            nonce: this.nonce.get(address),
-          },accounts.get(address))
-          this.nonce.set(address, this.nonce.get(address)+1),
-          this.sended ++;
-          batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
-        } catch (e) {
-          taskLogger.error(e.toString());
+    if (this.isAvailble) {
+      let batch = new web3.eth.BatchRequest()
+      for (let address of this.availbleAccounts) {
+        for (let i = 0; i < transPerBatch; i++) {
+          try {
+            let txObject = await web3.eth.accounts.signTransaction({
+              to: '0x7cB5761e153CC39d618DE6D074C2a199B109671f',
+              value: '1',
+              chainId: '123',
+              gas: '210000',
+              gasPrice:'1000000000',
+              nonce: this.nonce.get(address),
+            },accounts.get(address))
+            this.nonce.set(address, this.nonce.get(address)+1),
+            this.sended ++;
+            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
+          } catch (e) {
+            taskLogger.error(e.toString());
+          }
         }
       }
+      taskLogger.info('sended: '+this.sended);
+      batch.execute()
     }
-    taskLogger.info('sended: '+this.sended);
-    batch.execute()
   }
 
   async start() {
@@ -97,6 +103,7 @@ class RepeatBatchSendCoin {
     await this.refreshAvailbleAddress()
     setInterval(this.refreshAvailbleAddress.bind(this), 1000)
     setInterval(this.checkNode.bind(this), 1000)
+    setInterval(this.sendcoin.bind(this), 100)
   }
 }
 
