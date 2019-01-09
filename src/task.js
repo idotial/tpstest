@@ -86,7 +86,11 @@ class RepeatBatchSendCoin {
       }
     }
     taskLogger.info('sended: '+this.sended);
-    batch.execute()
+    try {
+      batch.execute()
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async start() {
