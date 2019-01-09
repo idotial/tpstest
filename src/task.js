@@ -79,8 +79,9 @@ class RepeatBatchSendCoin {
           },accounts.get(address))
           this.nonce.set(address, this.nonce.get(address)+1),
           this.sended ++;
-          batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction, ()=>{}))
+          batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
         } catch (e) {
+          console.log(e);
           taskLogger.error(e.toString());
         }
       }
@@ -99,6 +100,7 @@ class RepeatBatchSendCoin {
     }
     // console.log(this.nonce);
     await this.refreshAvailbleAddress()
+    console.log(this.availbleAccounts);
     setInterval(this.refreshAvailbleAddress.bind(this), 1000)
     setInterval(this.checkNode.bind(this), 1000)
   }
