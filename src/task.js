@@ -22,6 +22,7 @@ class RepeatBatchSendCoin {
     for(let address of accounts.keys()) {
       let power = await web3.eth.getPower(address);
       this.power.set(address, power);
+      console.log(address + ':' + power);
       if (power < PowerLimit) {
         this.availbleAccounts.delete(address);
       } else {
