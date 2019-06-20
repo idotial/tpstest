@@ -32,7 +32,7 @@ class RepeatBatchSendCoin {
   }
 
   checkNode() {
-    const geth = execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status'], (error, stdout, stderr) => {
+    const geth = execFile(`/home/ec2-user/echain/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status'], (error, stdout, stderr) => {
       if (error) {
         taskError.error(error);
       } else {

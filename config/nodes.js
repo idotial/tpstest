@@ -1,5 +1,5 @@
 var nodes = [
-  {url: '/data/node1/geth.ipc', isAvailble: true}
+  {url: '/home/ec2-user/.etztest/geth.ipc', isAvailble: true}
 ]
 
 module.exports = nodes;
