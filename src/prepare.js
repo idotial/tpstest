@@ -3,13 +3,13 @@ var Web3 = require('web3');
 var net = require('net');
 var accounts = require('../config/accounts')
 var nodes = require('../config/nodes')
-var web3 = new Web3(new Web3.providers.IpcProvider(nodes[0].url, net));
+var web3 = new Web3(nodes[0].url, net);
 
 const PowerLimit = 1509715260000000
 const transPerBatch = 1
 
-const addrBase = '0x7cB5761e153CC39d618DE6D074C2a199B109671f'
-const baseprivate = '0x8D96FBC5316FDF6D02147D8792F9836E459C1AD0164AF91EBA4A5853D4D08AE2'
+const addrBase = '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd'
+const baseprivate = '0x6ecdc5bb03831a540119d871bbb7ce12876b6aa5964fb9f90d7984bbb84c863f'
 
 class RepeatBatchSendCoin {
   // constructor (){
@@ -43,7 +43,6 @@ class RepeatBatchSendCoin {
   // }
 
   async refreshNonce(address) {
-    console.log(web3);
     this.nonce = await web3.eth.getTransactionCount(addrBase);
     console.log(this.nonce);
   }
