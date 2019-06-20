@@ -20,19 +20,25 @@ class RepeatBatchSendCoin {
 
   async refreshAvailbleAddress() {
     for(let address of accounts.keys()) {
-      let power = await web3.eth.getPower(address);
-      this.power.set(address, power);
-      console.log(address + ':' + power);
-      if (power < PowerLimit) {
-        this.availbleAccounts.delete(address);
-      } else {
-        this.availbleAccounts.add(address);
+      try {
+        let power = execFileSync(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec',  `eth.getPower("${address}")`]);
+        // let power = await web3.eth.getPower(address);
+        power = Number(power);
+        this.power.set(address, power);
+        console.log(address + ':' + power);
+        if (power < PowerLimit) {
+          this.availbleAccounts.delete(address);
+        } else {
+          this.availbleAccounts.add(address);
+        }
+      } catch (e) {
+        console.log(e);
       }
     }
   }
 
   checkNode() {
-    const geth = execFile(`/home/ec2-user/echain/build/bin/geth`, ['attach', '--datadir', '/data/node1', '--exec',  'txpool.status'], (error, stdout, stderr) => {
+    const geth = execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec',  'txpool.status'], (error, stdout, stderr) => {
       if (error) {
         taskError.error(error);
       } else {
