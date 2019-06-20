@@ -3,7 +3,7 @@ var Web3 = require('web3');
 var net = require('net');
 var accounts = require('../config/accounts')
 var nodes = require('../config/nodes')
-var web3 = new Web3(new Web3.providers.IpcProvider(nodes[0].url), net);
+var web3 = new Web3(new Web3.providers.IpcProvider(nodes[0].url, net));
 
 const PowerLimit = 1509715260000000
 const transPerBatch = 1
