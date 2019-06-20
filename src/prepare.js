@@ -54,6 +54,7 @@ class RepeatBatchSendCoin {
     // let batch = new web3.eth.BatchRequest()
     for (let address of accounts.keys()) {
         console.log(address);
+        console.log(baseprivate);
         let txObject = await web3.eth.accounts.signTransaction({
           from: addrBase,
           to: address,
