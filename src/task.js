@@ -84,7 +84,7 @@ class RepeatBatchSendCoin {
             let txObject = await web3.eth.accounts.signTransaction({
               to: '0x7cB5761e153CC39d618DE6D074C2a199B109671f',
               value: '1',
-              chainId: '123',
+              chainId: 90,
               gas: '210000',
               gasPrice:'1000000000',
               nonce: this.nonce.get(address),
