@@ -6,8 +6,8 @@ var nodes = require('../config/nodes')
 // var web3 = new Web3(new Web3.providers.IpcProvider(nodes[0].url, net));
 var web3 = new Web3(new Web3.providers.WebsocketProvider(nodes[0].url));
 
-const PowerLimit = 1509715260000000
-const transPerBatch = 1
+// const PowerLimit = 1509715260000000
+// const transPerBatch = 1
 
 const addrBase = '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd'
 const baseprivate = '0x6ecdc5bb03831a540119d871bbb7ce12876b6aa5964fb9f90d7984bbb84c863f'
@@ -45,6 +45,8 @@ class RepeatBatchSendCoin {
 
   async refreshNonce(address) {
     this.nonce = await web3.eth.getTransactionCount(addrBase);
+    balance = await web3.eth.getBalance(addrBase);
+    console.log(balance);
     console.log(this.nonce);
   }
 
