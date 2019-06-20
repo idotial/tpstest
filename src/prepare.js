@@ -9,8 +9,8 @@ var web3 = new Web3(new Web3.providers.WebsocketProvider(nodes[0].url));
 // const PowerLimit = 1509715260000000
 // const transPerBatch = 1
 
-const addrBase = '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd'
-const baseprivate = '6ecdc5bb03831a540119d871bbb7ce12876b6aa5964fb9f90d7984bbb84c863f'
+const addrBase = '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd';
+const baseprivate = '6ecdc5bb03831a540119d871bbb7ce12876b6aa5964fb9f90d7984bbb84c863f';
 
 class RepeatBatchSendCoin {
   // constructor (){
@@ -57,7 +57,7 @@ class RepeatBatchSendCoin {
           from: addrBase,
           to: address,
           // to:'0xb41b3986c377A8F914BF0A6DA54B6F7a60610819',
-          value: '10000000000000000000000000',
+          value: '10000',
           chainId: '90',
           gas: '210000', //100个地址的话差不多时两百万左右，具体可以测试的时候看下交易的gas used做调整
           gasPrice:'1000000000',
