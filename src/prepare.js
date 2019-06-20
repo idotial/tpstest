@@ -55,10 +55,10 @@ class RepeatBatchSendCoin {
     for (let address of accounts.keys()) {
         let txObject = await web3.eth.accounts.signTransaction({
           to: address,
-          value: '1000000000',
+          value: '1000000000000000000000',
           // value: '1000',
           chainId: 90,
-          gas: '210000', //100个地址的话差不多时两百万左右，具体可以测试的时候看下交易的gas used做调整
+          gas: '21000', //100个地址的话差不多时两百万左右，具体可以测试的时候看下交易的gas used做调整
           gasPrice:'1000000000',
           nonce: this.nonce++,
         },baseprivate)
