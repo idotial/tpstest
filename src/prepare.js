@@ -45,7 +45,7 @@ class RepeatBatchSendCoin {
 
   async refreshNonce(address) {
     this.nonce = await web3.eth.getTransactionCount(addrBase);
-    balance = await web3.eth.getBalance(addrBase);
+    let balance = await web3.eth.getBalance(addrBase);
     console.log(balance);
     console.log(this.nonce);
   }
