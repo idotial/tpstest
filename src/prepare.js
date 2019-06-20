@@ -55,7 +55,7 @@ class RepeatBatchSendCoin {
           to: address,
           // to:'0xb41b3986c377A8F914BF0A6DA54B6F7a60610819',
           value: '10000000000000000000000000',
-          chainId: '123',
+          chainId: '90',
           gas: '210000', //100个地址的话差不多时两百万左右，具体可以测试的时候看下交易的gas used做调整
           gasPrice:'1000000000',
           nonce: this.nonce++,
