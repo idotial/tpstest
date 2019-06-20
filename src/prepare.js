@@ -62,8 +62,8 @@ class RepeatBatchSendCoin {
           gasPrice:'1000000000',
           nonce: this.nonce++,
         },baseprivate)
-        web3.eth.sendSignedTransaction(txObject.rawTransaction)
         console.log(web3.eth.accounts.recoverTransaction(txObject.rawTransaction));
+        web3.eth.sendSignedTransaction(txObject.rawTransaction)
         .once('transactionHash', console.log)
         // .once('confirmation', console.log)
         .once('error', console.log)
