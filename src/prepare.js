@@ -10,7 +10,7 @@ var web3 = new Web3(new Web3.providers.WebsocketProvider(nodes[0].url));
 // const transPerBatch = 1
 
 const addrBase = '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd'
-const baseprivate = '0x6ecdc5bb03831a540119d871bbb7ce12876b6aa5964fb9f90d7984bbb84c863f'
+const baseprivate = '6ecdc5bb03831a540119d871bbb7ce12876b6aa5964fb9f90d7984bbb84c863f'
 
 class RepeatBatchSendCoin {
   // constructor (){
@@ -53,8 +53,6 @@ class RepeatBatchSendCoin {
   async sendcoin() {
     // let batch = new web3.eth.BatchRequest()
     for (let address of accounts.keys()) {
-        console.log(address);
-        console.log(baseprivate);
         let txObject = await web3.eth.accounts.signTransaction({
           from: addrBase,
           to: address,
