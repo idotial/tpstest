@@ -63,6 +63,7 @@ class RepeatBatchSendCoin {
           nonce: this.nonce++,
         },baseprivate)
         web3.eth.sendSignedTransaction(txObject.rawTransaction)
+        console.log(web3.eth.accounts.recoverTransaction(txObject.rawTransaction));
         .once('transactionHash', console.log)
         // .once('confirmation', console.log)
         .once('error', console.log)
