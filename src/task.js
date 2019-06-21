@@ -75,34 +75,34 @@ class RepeatBatchSendCoin {
     }
 
     async sendcoin() {
-      try {
-        if (this.isAvailble) {
-            let batch = new web3.eth.BatchRequest()
-            for (let address of this.availbleAccounts) {
-                for (let i = 0; i < transPerBatch; i++) {
-                    try {
-                        let txObject = await web3.eth.accounts.signTransaction({
-                            to: '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd',
-                            value: '1',
-                            chainId: 90,
-                            gas: '210000',
-                            gasPrice: '1000000000',
-                            nonce: this.nonce.get(address),
-                        }, accounts.get(address))
-                        this.nonce.set(address, this.nonce.get(address) + 1),
-                            this.sended++;
-                        batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
-                    } catch (e) {
-                        taskLogger.error(e.toString());
+        try {
+            if (this.isAvailble) {
+                let batch = new web3.eth.BatchRequest()
+                for (let address of this.availbleAccounts) {
+                    for (let i = 0; i < transPerBatch; i++) {
+                        try {
+                            let txObject = await web3.eth.accounts.signTransaction({
+                                to: '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd',
+                                value: '1',
+                                chainId: 90,
+                                gas: '210000',
+                                gasPrice: '1000000000',
+                                nonce: this.nonce.get(address),
+                            }, accounts.get(address))
+                            this.nonce.set(address, this.nonce.get(address) + 1),
+                                this.sended++;
+                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
+                        } catch (e) {
+                            taskLogger.error(e.toString());
+                        }
                     }
                 }
+                taskLogger.info('sended: ' + this.sended);
+                batch.execute()
             }
-            taskLogger.info('sended: ' + this.sended);
-            batch.execute()
+        } catch (e) {
+            console.log(e);
         }
-      } catch (e) {
-        console.log(e);
-      }
 
     }
 
