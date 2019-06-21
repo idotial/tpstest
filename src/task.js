@@ -8,7 +8,7 @@ var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
 const PowerLimit = 50515982000000000
-const transPerBatch = 50
+const transPerBatch = 10
 
 class RepeatBatchSendCoin {
     constructor() {
@@ -22,7 +22,7 @@ class RepeatBatchSendCoin {
     async refreshAvailbleAddress() {
         for (let address of accounts.keys()) {
             try {
-                execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '/root/.etztest/geth.ipc', '--exec', `eth.getPower("${address}")`], (error, stdout, stderr) => {
+                execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', `eth.getPower("${address}")`], (error, stdout, stderr) => {
                   if (error) {
                     throw error;
                   }
@@ -47,7 +47,7 @@ class RepeatBatchSendCoin {
 
     checkNode() {
         try {
-            execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '/root/.etztest/geth.ipc', '--exec', 'txpool.status'], (error, stdout, stderr) => {
+            execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', 'txpool.status'], (error, stdout, stderr) => {
               if (error) {
                 throw error;
               }
@@ -128,7 +128,7 @@ class RepeatBatchSendCoin {
         // console.log(this.availbleAccounts);
         setInterval(this.refreshAvailbleAddress.bind(this), 1000)
         setInterval(this.checkNode.bind(this), 1000)
-        setInterval(this.sendcoin.bind(this), 500)
+        setInterval(this.sendcoin.bind(this), 200)
     }
 }
 
