@@ -97,8 +97,7 @@ class RepeatBatchSendCoin {
                         }
                     }
                 }
-                taskLogger.info('sended: ' + this.sended);
-                await batch.execute();
+                batch.execute().then(console.log);
             }
         } catch (e) {
             console.log('qwer:',e);
