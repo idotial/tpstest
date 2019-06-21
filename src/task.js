@@ -71,7 +71,7 @@ class RepeatBatchSendCoin {
     async refreshNonce(address) {
         let nonce = await web3.eth.getTransactionCount(address, 'pending');
         this.nonce.set(address, nonce);
-        // console.log(this.nonce);
+        console.log(this.nonce);
     }
 
     async sendcoin() {
@@ -91,7 +91,7 @@ class RepeatBatchSendCoin {
                             }, accounts.get(address))
                             this.nonce.set(address, this.nonce.get(address) + 1),
                                 this.sended++;
-                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction, 'transactionHash', console.log))
+                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
                         } catch (e) {
                             taskLogger.error(e.toString());
                         }
