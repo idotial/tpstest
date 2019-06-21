@@ -25,6 +25,7 @@ const taskLogger = winston.createLogger({
     // - Write all logs error (and below) to `error.log`.
     //
     transport,
+    new winston.transports.File({ filename: 'combined.log', level: 'info' }),
     new winston.transports.File({ filename: 'log/taskError.log', level: 'error' }),
   ]
 });
