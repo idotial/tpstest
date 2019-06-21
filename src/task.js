@@ -7,8 +7,8 @@ var accounts = require('../config/accounts')
 var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
-const PowerLimit = 2509715260000000
-const transPerBatch = 4
+const PowerLimit = 5515982000000000
+const transPerBatch = 5
 
 class RepeatBatchSendCoin {
   constructor (){
@@ -33,7 +33,7 @@ class RepeatBatchSendCoin {
           this.availbleAccounts.add(address);
         }
       } catch (e) {
-        console.log(e);
+        taskLogger.error(e.toString());
       }
     }
     // console.log(this.availbleAccounts);
@@ -60,7 +60,7 @@ class RepeatBatchSendCoin {
             taskLogger.info('task restart');
             this.isAvailble = true
           }
-          // console.log(data);
+          console.log(data);
         } catch (e) {
             taskLogger.error(e.toString());
             taskLogger.error(data.toString());
