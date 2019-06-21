@@ -22,44 +22,52 @@ class RepeatBatchSendCoin {
     async refreshAvailbleAddress() {
         for (let address of accounts.keys()) {
             try {
-                let power = execFileSync(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', `eth.getPower("${address}")`]);
+                let power = execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', `eth.getPower("${address}")`], (error, stdout, stderr) => {
+                  if (error) {
+                    throw error;
+                  }
+                  let power = Number(stdout);
+                  this.power.set(address, power);
+                  // console.log(address + ':' + power);
+                  if (power < PowerLimit) {
+                      this.availbleAccounts.delete(address);
+                  } else {
+                      this.availbleAccounts.add(address);
+                  }
+                });
                 // let power = await web3.eth.getPower(address);
-                power = Number(power);
-                this.power.set(address, power);
-                // console.log(address + ':' + power);
-                if (power < PowerLimit) {
-                    this.availbleAccounts.delete(address);
-                } else {
-                    this.availbleAccounts.add(address);
-                }
             } catch (e) {
                 taskLogger.error(e.toString());
             }
         }
         console.log(this.availbleAccounts);
-        taskLogger.info('sended: ' + this.sended);
+        // taskLogger.info('sended: ' + this.sended);
         console.log('sended: ' + this.sended);
     }
 
     checkNode() {
         try {
-            let status = execFileSync(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', 'txpool.status']);
-            let data = eval('(' + status + ')')
-            if (data.pending + data.queued > 2000) {
-                // if (this.intervalId != null) {
-                //   clearInterval(this.intervalId)
-                //   this.intervalId = null;
-                //   taskLogger.info('task stop');
-                // }
-                if (this.isAvailble) {
-                    this.isAvailble = false;
-                    taskLogger.info('task stop');
-                }
-            } else if (!this.isAvailble) {
-                taskLogger.info('task restart');
-                this.isAvailble = true
-            }
-            console.log(data);
+            let status = execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', 'txpool.status'], (error, stdout, stderr) => {
+              if (error) {
+                throw error;
+              }
+              let data = eval('(' + stdout + ')')
+              if (data.pending + data.queued > 2000) {
+                  // if (this.intervalId != null) {
+                  //   clearInterval(this.intervalId)
+                  //   this.intervalId = null;
+                  //   taskLogger.info('task stop');
+                  // }
+                  if (this.isAvailble) {
+                      this.isAvailble = false;
+                      taskLogger.info('task stop');
+                  }
+              } else if (!this.isAvailble) {
+                  taskLogger.info('task restart');
+                  this.isAvailble = true
+              }
+              console.log(data);
+            });
         } catch (e) {
             taskLogger.error(e.toString());
             taskLogger.error(data.toString());
