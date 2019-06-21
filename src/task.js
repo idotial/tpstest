@@ -8,7 +8,7 @@ var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
 const PowerLimit = 50515982000000000
-const transPerBatch = 5
+const transPerBatch = 50
 
 class RepeatBatchSendCoin {
     constructor() {
@@ -128,7 +128,7 @@ class RepeatBatchSendCoin {
         // console.log(this.availbleAccounts);
         setInterval(this.refreshAvailbleAddress.bind(this), 1000)
         setInterval(this.checkNode.bind(this), 1000)
-        setInterval(this.sendcoin.bind(this), 100)
+        setInterval(this.sendcoin.bind(this), 500)
     }
 }
 
