@@ -7,7 +7,7 @@ var accounts = require('../config/accounts')
 var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
-const PowerLimit = 5515982000000000
+const PowerLimit = 50515982000000000
 const transPerBatch = 5
 
 class RepeatBatchSendCoin {
@@ -36,7 +36,7 @@ class RepeatBatchSendCoin {
                 taskLogger.error(e.toString());
             }
         }
-        // console.log(this.availbleAccounts);
+        console.log(this.availbleAccounts);
     }
 
     checkNode() {
@@ -71,7 +71,7 @@ class RepeatBatchSendCoin {
     async refreshNonce(address) {
         let nonce = await web3.eth.getTransactionCount(address, 'pending');
         this.nonce.set(address, nonce);
-        console.log(this.nonce);
+        // console.log(this.nonce);
     }
 
     async sendcoin() {
@@ -101,7 +101,7 @@ class RepeatBatchSendCoin {
                 batch.execute()
             }
         } catch (e) {
-            console.log(e);
+            console.log('qwer:',e);
         }
 
     }
@@ -110,7 +110,7 @@ class RepeatBatchSendCoin {
         for (let address of accounts.keys()) {
             await this.refreshNonce(address)
         }
-        // console.log(this.nonce);
+        console.log(this.nonce);
         await this.refreshAvailbleAddress()
         // console.log(this.availbleAccounts);
         setInterval(this.refreshAvailbleAddress.bind(this), 1000)
