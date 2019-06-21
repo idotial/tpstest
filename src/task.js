@@ -91,13 +91,14 @@ class RepeatBatchSendCoin {
                             }, accounts.get(address))
                             this.nonce.set(address, this.nonce.get(address) + 1),
                                 this.sended++;
-                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
+                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction), console.log)
                         } catch (e) {
                             taskLogger.error(e.toString());
                         }
                     }
                 }
-                batch.execute().then(console.log).catch(console.log);
+                taskLogger.info('sended: ' + this.sended);
+                batch.execute();
             }
         } catch (e) {
             console.log('qwer:',e);
