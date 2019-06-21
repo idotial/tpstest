@@ -1,5 +1,6 @@
 var Web3 = require('web3');
 const execFile = require('child_process').execFile;
+const execFileSync = require('child_process').execFileSync;
 var net = require('net');
 var taskLogger = require('./taskLogger')
 var accounts = require('../config/accounts')
@@ -82,7 +83,7 @@ class RepeatBatchSendCoin {
         for (let i = 0; i < transPerBatch; i++) {
           try {
             let txObject = await web3.eth.accounts.signTransaction({
-              to: '0x7cB5761e153CC39d618DE6D074C2a199B109671f',
+              to: '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd',
               value: '1',
               chainId: 90,
               gas: '210000',
