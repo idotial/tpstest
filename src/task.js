@@ -36,6 +36,7 @@ class RepeatBatchSendCoin {
         console.log(e);
       }
     }
+    console.log(this.availbleAccounts);
   }
 
   checkNode() {
@@ -59,6 +60,7 @@ class RepeatBatchSendCoin {
             taskLogger.info('task restart');
             this.isAvailble = true
           }
+          console.log(data);
         } catch (e) {
             taskLogger.error(e.toString());
             taskLogger.error(data.toString());
