@@ -91,7 +91,7 @@ class RepeatBatchSendCoin {
                             }, accounts.get(address))
                             this.nonce.set(address, this.nonce.get(address) + 1),
                                 this.sended++;
-                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction, 'transactionHash', console.log))
+                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction, 'error', console.log))
                         } catch (e) {
                             taskLogger.error(e.toString());
                         }
