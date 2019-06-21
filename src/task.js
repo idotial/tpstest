@@ -36,7 +36,7 @@ class RepeatBatchSendCoin {
         console.log(e);
       }
     }
-    console.log(this.availbleAccounts);
+    // console.log(this.availbleAccounts);
   }
 
   checkNode() {
@@ -60,7 +60,7 @@ class RepeatBatchSendCoin {
             taskLogger.info('task restart');
             this.isAvailble = true
           }
-          console.log(data);
+          // console.log(data);
         } catch (e) {
             taskLogger.error(e.toString());
             taskLogger.error(data.toString());
@@ -76,6 +76,7 @@ class RepeatBatchSendCoin {
   async refreshNonce(address) {
     let nonce = await web3.eth.getTransactionCount(address);
     this.nonce.set(address, nonce);
+    console.log(this.nonce);
   }
 
   async sendcoin() {
@@ -111,7 +112,7 @@ class RepeatBatchSendCoin {
     }
     // console.log(this.nonce);
     await this.refreshAvailbleAddress()
-    console.log(this.availbleAccounts);
+    // console.log(this.availbleAccounts);
     setInterval(this.refreshAvailbleAddress.bind(this), 1000)
     setInterval(this.checkNode.bind(this), 1000)
     setInterval(this.sendcoin.bind(this), 100)
