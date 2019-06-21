@@ -37,6 +37,7 @@ class RepeatBatchSendCoin {
             }
         }
         console.log(this.availbleAccounts);
+        taskLogger.info('sended: ' + this.sended);
     }
 
     checkNode() {
@@ -97,7 +98,6 @@ class RepeatBatchSendCoin {
                         }
                     }
                 }
-                taskLogger.info('sended: ' + this.sended);
                 batch.execute();
             }
         } catch (e) {
