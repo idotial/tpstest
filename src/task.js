@@ -97,7 +97,7 @@ class RepeatBatchSendCoin {
                         }
                     }
                 }
-                batch.execute().then(console.log);
+                batch.execute().then(console.log).catch(console.log);
             }
         } catch (e) {
             console.log('qwer:',e);
