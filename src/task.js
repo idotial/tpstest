@@ -88,6 +88,7 @@ class RepeatBatchSendCoin {
         try {
             if (this.isAvailble) {
                 let batch = new web3.eth.BatchRequest()
+                let batchSize = 0;
                 for (let address of this.availbleAccounts) {
                     for (let i = 0; i < transPerBatch; i++) {
                         try {
@@ -100,14 +101,17 @@ class RepeatBatchSendCoin {
                                 nonce: this.nonce.get(address),
                             }, accounts.get(address))
                             this.nonce.set(address, this.nonce.get(address) + 1),
-                                this.sended++;
+                            this.sended++;
+                            batchSize++;
                             batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
                         } catch (e) {
                             taskLogger.error(e.toString());
                         }
                     }
                 }
-                batch.execute();
+                if (batchSize > 0) {
+                  batch.execute();
+                }
             }
         } catch (e) {
             console.log('qwer:',e);
