@@ -26,7 +26,7 @@ class RepeatBatchSendCoin {
                 // let power = await web3.eth.getPower(address);
                 power = Number(power);
                 this.power.set(address, power);
-                console.log(address + ':' + power);
+                // console.log(address + ':' + power);
                 if (power < PowerLimit) {
                     this.availbleAccounts.delete(address);
                 } else {
@@ -75,6 +75,7 @@ class RepeatBatchSendCoin {
     }
 
     async sendcoin() {
+      try {
         if (this.isAvailble) {
             let batch = new web3.eth.BatchRequest()
             for (let address of this.availbleAccounts) {
@@ -99,6 +100,10 @@ class RepeatBatchSendCoin {
             taskLogger.info('sended: ' + this.sended);
             batch.execute()
         }
+      } catch (e) {
+        console.log(e);
+      }
+
     }
 
     async start() {
