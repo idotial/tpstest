@@ -8,7 +8,7 @@ var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
 const PowerLimit = 50515982000000000
-const transPerBatch = 10
+const transPerBatch = 50
 
 class RepeatBatchSendCoin {
     constructor() {
@@ -19,7 +19,7 @@ class RepeatBatchSendCoin {
         this.isAvailble = true;
     }
 
-    async refreshAvailbleAddress() {
+    refreshAvailbleAddress() {
         for (let address of accounts.keys()) {
             try {
                 execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', `eth.getPower("${address}")`], (error, stdout, stderr) => {
