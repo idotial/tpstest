@@ -22,7 +22,7 @@ class RepeatBatchSendCoin {
     async refreshAvailbleAddress() {
         for (let address of accounts.keys()) {
             try {
-                let power = execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', `eth.getPower("${address}")`], (error, stdout, stderr) => {
+                execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', `eth.getPower("${address}")`], (error, stdout, stderr) => {
                   if (error) {
                     throw error;
                   }
@@ -47,7 +47,7 @@ class RepeatBatchSendCoin {
 
     checkNode() {
         try {
-            let status = execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', 'txpool.status'], (error, stdout, stderr) => {
+            execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', 'txpool.status'], (error, stdout, stderr) => {
               if (error) {
                 throw error;
               }
