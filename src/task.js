@@ -38,6 +38,7 @@ class RepeatBatchSendCoin {
         }
         console.log(this.availbleAccounts);
         taskLogger.info('sended: ' + this.sended);
+        console.log('sended: ' + this.sended);
     }
 
     checkNode() {
