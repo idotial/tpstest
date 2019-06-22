@@ -124,9 +124,9 @@ class RepeatBatchSendCoin {
             await this.refreshNonce(address)
         }
         console.log(this.nonce);
-        await this.refreshAvailbleAddress()
+        // await this.refreshAvailbleAddress()
         // console.log(this.availbleAccounts);
-        setInterval(this.refreshAvailbleAddress.bind(this), 1000)
+        // setInterval(this.refreshAvailbleAddress.bind(this), 1000)
         setInterval(this.checkNode.bind(this), 1000)
         setInterval(this.sendcoin.bind(this), 100)
     }
