@@ -8,7 +8,7 @@ module.exports = {
     autorestart: true,
     restart_delay: 60000,
     watch: false,
-    max_memory_restart: '6G',
+    max_memory_restart: '1G',
     log_date_format: 'YYYY-MM-DD HH:mm:ss ZZ',
     env: {
       NODE_ENV: 'development',
