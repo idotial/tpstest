@@ -121,7 +121,7 @@ class RepeatBatchSendCoin {
 
     async start() {
         for (let address of accounts.keys()) {
-            await this.refreshNonce(address)
+            await this.refreshNonce(address);
         }
         for (address of accounts.keys()) {
           this.availbleAccounts.add(address);
