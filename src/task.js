@@ -52,7 +52,7 @@ class RepeatBatchSendCoin {
                 throw error;
               }
               let data = eval('(' + stdout + ')')
-              if (data.pending + data.queued > 4000) {
+              if (data.pending + data.queued > 2500) {
                   // if (this.intervalId != null) {
                   //   clearInterval(this.intervalId)
                   //   this.intervalId = null;
@@ -110,7 +110,11 @@ class RepeatBatchSendCoin {
                     }
                 }
                 if (batchSize > 0) {
-                  const batchResults = await batch.execute();
+                  try {
+                    const batchResults = await batch.execute();
+                  } catch (e) {
+                    console.log(e);
+                  }
                   console.log('sended: ' + this.sended);
                 }
             }
