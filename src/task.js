@@ -103,14 +103,15 @@ class RepeatBatchSendCoin {
                             this.nonce.set(address, this.nonce.get(address) + 1),
                             this.sended++;
                             batchSize++;
-                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction,  () => {}))
+                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction, 'error', () => {}))
                         } catch (e) {
                             taskLogger.error(e.toString());
                         }
                     }
                 }
                 if (batchSize > 0) {
-                  await batch.execute();
+                  const batchResults = await batch.execute();
+                  batchResults.response.forEach(block => console.log(JSON.stringify(block)));
                 }
             }
         } catch (e) {
