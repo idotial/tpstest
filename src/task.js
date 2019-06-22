@@ -47,7 +47,7 @@ class RepeatBatchSendCoin {
 
     checkNode() {
         try {
-            execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '/root/.etztest/geth.ipc', '--exec', 'txpool.status'], (error, stdout, stderr) => {
+            execFile(`/home/ec2-user/go-etherzero/build/bin/geth`, ['attach', '/home/ec2-user/.etztest/geth.ipc', '--exec', 'txpool.status'], (error, stdout, stderr) => {
               if (error) {
                 throw error;
               }
