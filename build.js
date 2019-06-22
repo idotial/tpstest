@@ -7,9 +7,10 @@ if (!fs.existsSync('config/accounts.js')) {
 `
   for (var i = 0; i < 10; i++) {
     let account = web3.eth.accounts.create();
-    data += `accounts.set('${account.address}', 'account.privateKey');
+    data += `accounts.set('${account.address}', '${account.privateKey}');
 `
   }
-  data += 'module.exports = accounts;'
+  data += `module.exports = accounts;
+`
   fs.writeFileSync('config/accounts.js', data);
 }
