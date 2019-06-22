@@ -116,7 +116,10 @@ class RepeatBatchSendCoin {
         } catch (e) {
             console.log('qwer:',e);
         }
+    }
 
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     async start() {
