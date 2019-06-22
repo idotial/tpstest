@@ -118,10 +118,6 @@ class RepeatBatchSendCoin {
         }
     }
 
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
     async start() {
         for (let address of accounts.keys()) {
             await this.refreshNonce(address)
