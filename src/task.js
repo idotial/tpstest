@@ -8,7 +8,7 @@ var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
 const PowerLimit = 50515982000000000
-const transPerBatch = 5
+const transPerBatch = 50
 
 class RepeatBatchSendCoin {
     constructor() {
@@ -19,31 +19,31 @@ class RepeatBatchSendCoin {
         this.isAvailble = true;
     }
 
-    refreshAvailbleAddress() {
-        for (let address of accounts.keys()) {
-            try {
-                execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '/root/.etztest/geth.ipc', '--exec', `eth.getPower("${address}")`], (error, stdout, stderr) => {
-                  if (error) {
-                    throw error;
-                  }
-                  let power = Number(stdout);
-                  this.power.set(address, power);
-                  // console.log(address + ':' + power);
-                  if (power < PowerLimit) {
-                      this.availbleAccounts.delete(address);
-                  } else {
-                      this.availbleAccounts.add(address);
-                  }
-                });
-                // let power = await web3.eth.getPower(address);
-            } catch (e) {
-                taskLogger.error(e.toString());
-            }
-        }
-        console.log(this.availbleAccounts);
-        // taskLogger.info('sended: ' + this.sended);
-        console.log('sended: ' + this.sended);
-    }
+    // refreshAvailbleAddress() {
+    //     for (let address of accounts.keys()) {
+    //         try {
+    //             execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '/root/.etztest/geth.ipc', '--exec', `eth.getPower("${address}")`], (error, stdout, stderr) => {
+    //               if (error) {
+    //                 throw error;
+    //               }
+    //               let power = Number(stdout);
+    //               this.power.set(address, power);
+    //               // console.log(address + ':' + power);
+    //               if (power < PowerLimit) {
+    //                   this.availbleAccounts.delete(address);
+    //               } else {
+    //                   this.availbleAccounts.add(address);
+    //               }
+    //             });
+    //             // let power = await web3.eth.getPower(address);
+    //         } catch (e) {
+    //             taskLogger.error(e.toString());
+    //         }
+    //     }
+    //     console.log(this.availbleAccounts);
+    //     // taskLogger.info('sended: ' + this.sended);
+    //     console.log('sended: ' + this.sended);
+    // }
 
     checkNode() {
         try {
@@ -52,7 +52,7 @@ class RepeatBatchSendCoin {
                 throw error;
               }
               let data = eval('(' + stdout + ')')
-              if (data.pending + data.queued > 5000) {
+              if (data.pending + data.queued > 4000) {
                   // if (this.intervalId != null) {
                   //   clearInterval(this.intervalId)
                   //   this.intervalId = null;
@@ -103,7 +103,7 @@ class RepeatBatchSendCoin {
                             this.nonce.set(address, this.nonce.get(address) + 1),
                             this.sended++;
                             batchSize++;
-                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction, 'error', () => {}))
+                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
                         } catch (e) {
                             taskLogger.error(e.toString());
                         }
@@ -111,7 +111,7 @@ class RepeatBatchSendCoin {
                 }
                 if (batchSize > 0) {
                   const batchResults = await batch.execute();
-                  batchResults.response.forEach(block => console.log(JSON.stringify(block)));
+                  console.log('sended: ' + this.sended);
                 }
             }
         } catch (e) {
@@ -128,7 +128,7 @@ class RepeatBatchSendCoin {
         // console.log(this.availbleAccounts);
         setInterval(this.refreshAvailbleAddress.bind(this), 1000)
         setInterval(this.checkNode.bind(this), 1000)
-        setInterval(this.sendcoin.bind(this), 200)
+        setInterval(this.sendcoin.bind(this), 100)
     }
 }
 
