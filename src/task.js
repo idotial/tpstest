@@ -123,7 +123,7 @@ class RepeatBatchSendCoin {
         for (let address of accounts.keys()) {
             await this.refreshNonce(address);
         }
-        for (address of accounts.keys()) {
+        for (let address of accounts.keys()) {
           this.availbleAccounts.add(address);
         }
         console.log(this.nonce);
