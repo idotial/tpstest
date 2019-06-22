@@ -8,7 +8,7 @@ var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
 const PowerLimit = 50515982000000000
-const transPerBatch = 30
+const transPerBatch = 100
 
 class RepeatBatchSendCoin {
     constructor() {
@@ -52,7 +52,7 @@ class RepeatBatchSendCoin {
                 throw error;
               }
               let data = eval('(' + stdout + ')')
-              if (data.pending + data.queued > 2000) {
+              if (data.pending + data.queued > 5000) {
                   // if (this.intervalId != null) {
                   //   clearInterval(this.intervalId)
                   //   this.intervalId = null;
