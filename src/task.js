@@ -8,7 +8,7 @@ var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
 const PowerLimit = 50515982000000000
-const transPerBatch = 100
+const transPerBatch = 5
 
 class RepeatBatchSendCoin {
     constructor() {
@@ -103,18 +103,18 @@ class RepeatBatchSendCoin {
                             this.nonce.set(address, this.nonce.get(address) + 1),
                             this.sended++;
                             batchSize++;
-                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
+                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction,  () => {}))
                         } catch (e) {
                             taskLogger.error(e.toString());
                         }
                     }
                 }
                 if (batchSize > 0) {
-                  batch.execute();
+                  await batch.execute();
                 }
             }
         } catch (e) {
-            console.log('qwer:',e);
+            console.log(e);
         }
     }
 
