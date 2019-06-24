@@ -10,7 +10,7 @@ module.exports = {
     watch: false,
     max_memory_restart: '1G',
     log_date_format: 'YYYY-MM-DD HH:mm:ss ZZ',
-    cron_restart: "0 0 0/2 * * ?",
+    // cron_restart: "0 0 0/2 * * ?",
     env: {
       NODE_ENV: 'development',
     },
