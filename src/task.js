@@ -52,7 +52,11 @@ class RepeatBatchSendCoin {
                 throw error;
               }
               let data = eval('(' + stdout + ')')
-              if (data.pending + data.queued > 2500) {
+              if (data.pending + data.queued > 5000) {
+                  console.log(new Date() + ": task fail");
+                  process.exit(1);
+              }
+              if (data.pending + data.queued > 2000) {
                   // if (this.intervalId != null) {
                   //   clearInterval(this.intervalId)
                   //   this.intervalId = null;
