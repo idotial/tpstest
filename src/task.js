@@ -125,7 +125,7 @@ class RepeatBatchSendCoin {
                   try {
                     const batchResults = await batch.execute();
                   } catch (e) {
-                    console.log(e);
+                    // console.log(e);
                   }
                   console.log('sended: ' + this.sended);
                 }
