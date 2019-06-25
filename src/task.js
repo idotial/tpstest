@@ -7,8 +7,11 @@ var accounts = require('../config/accounts')
 var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
-const PowerLimit = 50515982000000000
-const transPerBatch = 50
+const PowerLimit = 50515982000000000;
+const TransPerBatch = 30;
+const CheckNodePeriod = 2000;
+const SendcoinPeriod = 199;
+const TaskRestartPeriod = 1 * 60 * 60 * 1000;
 
 class RepeatBatchSendCoin {
     constructor() {
@@ -17,6 +20,7 @@ class RepeatBatchSendCoin {
         this.nonce = new Map();
         this.sended = 0;
         this.isAvailble = true;
+        this.uptime = 0;
     }
 
     // refreshAvailbleAddress() {
@@ -47,6 +51,10 @@ class RepeatBatchSendCoin {
 
     checkNode() {
         try {
+          if (this.uptime > TaskRestartPeriod) {
+            process.exit(1);
+          }
+          this.uptime += CheckNodePeriod;
             execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '/root/.etztest/geth.ipc', '--exec', 'txpool.status'], (error, stdout, stderr) => {
               if (error) {
                 throw error;
@@ -94,7 +102,7 @@ class RepeatBatchSendCoin {
                 let batch = new web3.eth.BatchRequest()
                 let batchSize = 0;
                 for (let address of this.availbleAccounts) {
-                    for (let i = 0; i < transPerBatch; i++) {
+                    for (let i = 0; i < TransPerBatch; i++) {
                         try {
                             let txObject = await web3.eth.accounts.signTransaction({
                                 to: '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd',
@@ -138,8 +146,8 @@ class RepeatBatchSendCoin {
         // await this.refreshAvailbleAddress()
         // console.log(this.availbleAccounts);
         // setInterval(this.refreshAvailbleAddress.bind(this), 1000)
-        setInterval(this.checkNode.bind(this), 1000)
-        setInterval(this.sendcoin.bind(this), 100)
+        setInterval(this.checkNode.bind(this), CheckNodePeriod)
+        setInterval(this.sendcoin.bind(this), SendcoinPeriod)
     }
 }
 
