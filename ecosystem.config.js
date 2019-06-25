@@ -6,7 +6,7 @@ module.exports = {
     // args: 'one two',
     instances: 1,
     autorestart: true,
-    restart_delay: 60000,
+    restart_delay: 30000,
     watch: false,
     max_memory_restart: '1G',
     log_date_format: 'YYYY-MM-DD HH:mm:ss ZZ',
