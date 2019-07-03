@@ -70,7 +70,7 @@ class RepeatBatchSendCoin {
               }
               let data = eval('(' + stdout + ')')
               console.log(data);
-              if (data.pending + data.queued > 5000) {
+              if (data.pending + data.queued > 7000) {
                   console.log(new Date() + ": task fail");
                   process.exit(1);
               }
