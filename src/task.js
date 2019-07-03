@@ -8,9 +8,9 @@ var nodes = require('../config/nodes')
 var web3 = new Web3(nodes[0].url, net);
 
 const PowerLimit = 50515982000000000;
-const TransPerBatch = 30;
+const TransPerBatch = 50;
 const CheckNodePeriod = 2000;
-const SendcoinPeriod = 199;
+const SendcoinPeriod = 299;
 const TaskRestartPeriod = 2 * 60 * 60 * 1000;
 
 class RepeatBatchSendCoin {
@@ -73,7 +73,7 @@ class RepeatBatchSendCoin {
                   console.log(new Date() + ": task fail");
                   process.exit(1);
               }
-              if (data.pending + data.queued > 2000) {
+              if (data.pending + data.queued > 3000) {
                   // if (this.intervalId != null) {
                   //   clearInterval(this.intervalId)
                   //   this.intervalId = null;
