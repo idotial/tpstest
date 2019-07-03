@@ -11,7 +11,7 @@ const PowerLimit = 50515982000000000;
 const TransPerBatch = 30;
 const CheckNodePeriod = 2000;
 const SendcoinPeriod = 199;
-const TaskRestartPeriod = 1 * 60 * 60 * 1000;
+const TaskRestartPeriod = 2 * 60 * 60 * 1000;
 
 class RepeatBatchSendCoin {
     constructor() {
@@ -48,6 +48,15 @@ class RepeatBatchSendCoin {
     //     // taskLogger.info('sended: ' + this.sended);
     //     console.log('sended: ' + this.sended);
     // }
+    checkSyncing() {
+      let syncing = await web3.eth.isSyncing();
+      if (syncing == false) {
+        return
+      } else {
+        console.log(syncing);
+        process.exit(1);
+      }
+    }
 
     checkNode() {
         try {
@@ -146,8 +155,9 @@ class RepeatBatchSendCoin {
         // await this.refreshAvailbleAddress()
         // console.log(this.availbleAccounts);
         // setInterval(this.refreshAvailbleAddress.bind(this), 1000)
-        setInterval(this.checkNode.bind(this), CheckNodePeriod)
-        setInterval(this.sendcoin.bind(this), SendcoinPeriod)
+        setInterval(this.checkSyncing.bind(this), 10000)
+        setInterval(this.checkNode.bind(this), CheckNodePeriod);
+        setInterval(this.sendcoin.bind(this), SendcoinPeriod);
     }
 }
 
