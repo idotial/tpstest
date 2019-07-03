@@ -48,7 +48,7 @@ class RepeatBatchSendCoin {
     //     // taskLogger.info('sended: ' + this.sended);
     //     console.log('sended: ' + this.sended);
     // }
-    checkSyncing() {
+    async heckSyncing() {
       let syncing = await web3.eth.isSyncing();
       if (syncing == false) {
         return
