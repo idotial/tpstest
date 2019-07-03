@@ -53,7 +53,7 @@ class RepeatBatchSendCoin {
       console.log(syncing);
       if (syncing == false) {
         return
-      } else {    
+      } else {
         process.exit(1);
       }
     }
@@ -69,6 +69,7 @@ class RepeatBatchSendCoin {
                 throw error;
               }
               let data = eval('(' + stdout + ')')
+              console.log(data);
               if (data.pending + data.queued > 5000) {
                   console.log(new Date() + ": task fail");
                   process.exit(1);
@@ -87,7 +88,6 @@ class RepeatBatchSendCoin {
                   taskLogger.info('task restart');
                   this.isAvailble = true
               }
-              console.log(data);
             });
         } catch (e) {
             taskLogger.error(e.toString());
