@@ -50,10 +50,10 @@ class RepeatBatchSendCoin {
     // }
     async checkSyncing() {
       let syncing = await web3.eth.isSyncing();
+      console.log(syncing);
       if (syncing == false) {
         return
-      } else {
-        console.log(syncing);
+      } else {    
         process.exit(1);
       }
     }
