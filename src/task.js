@@ -5,8 +5,9 @@ var net = require('net');
 var taskLogger = require('./taskLogger')
 var accounts = require('../config/accounts')
 var nodes = require('../config/nodes')
+var { TxPool } = require('web3-eth-txpool');
 var web3 = new Web3(nodes[0].url, net);
-
+const txPool = new TxPool(web3.currentProvider);
 const PowerLimit = 50515982000000000;
 const TransPerBatch = 50;
 const CheckNodePeriod = 2000;
@@ -64,6 +65,8 @@ class RepeatBatchSendCoin {
             process.exit(1);
           }
           this.uptime += CheckNodePeriod;
+          let status = await txPool.getStatus();
+          console.log('status:', status);
             execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '/root/.etztest/geth.ipc', '--exec', 'txpool.status'], (error, stdout, stderr) => {
               if (error) {
                 throw error;
