@@ -59,7 +59,7 @@ class RepeatBatchSendCoin {
       }
     }
 
-    checkNode() {
+    async checkNode() {
         try {
           if (this.uptime > TaskRestartPeriod) {
             process.exit(1);
