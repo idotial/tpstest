@@ -50,121 +50,106 @@ class RepeatBatchSendCoin {
     //     console.log('sended: ' + this.sended);
     // }
     async checkSyncing() {
-      let syncing = await web3.eth.isSyncing();
-      console.log(syncing);
-      if (syncing == false) {
-        return
-      } else {
-        process.exit(1);
-      }
+        let syncing = await web3.eth.isSyncing();
+        console.log(syncing);
+        if (syncing == false) {
+            return
+        } else {
+            process.exit(1);
+        }
     }
 
     async checkNode() {
         try {
-          if (this.uptime > TaskRestartPeriod) {
-            process.exit(1);
-          }
-          this.uptime += CheckNodePeriod;
-          let status = await txPool.getStatus();
-          console.log('status:', status);
-            execFile(`/root/go-etherzero/build/bin/geth`, ['attach', '/root/.etztest/geth.ipc', '--exec', 'txpool.status'], (error, stdout, stderr) => {
-              if (error) {
-                throw error;
-              }
-              let data = eval('(' + stdout + ')')
-              console.log(data);
-              if (data.pending + data.queued > 7000) {
-                  console.log(new Date() + ": task fail");
-                  process.exit(1);
-              }
-              if (data.pending + data.queued > 3000) {
-                  // if (this.intervalId != null) {
-                  //   clearInterval(this.intervalId)
-                  //   this.intervalId = null;
-                  //   taskLogger.info('task stop');
-                  // }
-                  if (this.isAvailble) {
-                      this.isAvailble = false;
-                      taskLogger.info('task stop');
-                  }
-              } else if (!this.isAvailble) {
-                  taskLogger.info('task restart');
-                  this.isAvailble = true
-              }
-            });
-        } catch (e) {
-            taskLogger.error(e.toString());
-            taskLogger.error(data.toString());
-            if (this.isAvailble) {
-                this.isAvailble = false;
-                taskLogger.info('task stop');
+            if (this.uptime > TaskRestartPeriod) {
+                process.exit(1);
+            }
+            this.uptime += CheckNodePeriod;
+            let status = await txPool.getStatus();
+            console.log(status);
+            if (status.pending + status.queued > 7000) {
+                console.log(new Date() + ": task fail");
+                process.exit(1);
+            }
+            if (status.pending + status.queued > 3000) {
+                // if (this.intervalId != null) {
+                //   clearInterval(this.intervalId)
+                //   this.intervalId = null;
+                //   taskLogger.info('task stop');
+                // }
+                if (this.isAvailble) {
+                    this.isAvailble = false;
+                    taskLogger.info('task stop');
+                }
+            } else if (!this.isAvailble) {
+                taskLogger.info('task restart');
+                this.isAvailble = true
             }
         }
-    }
 
-    async refreshNonce(address) {
-        let nonce = await web3.eth.getTransactionCount(address, 'pending');
-        this.nonce.set(address, nonce);
-        console.log(this.nonce);
-    }
+        async refreshNonce(address) {
+            let nonce = await web3.eth.getTransactionCount(address, 'pending');
+            this.nonce.set(address, nonce);
+            console.log(this.nonce);
+        }
 
-    async sendcoin() {
-        try {
-            if (this.isAvailble) {
-                let batch = new web3.eth.BatchRequest()
-                let batchSize = 0;
-                for (let address of this.availbleAccounts) {
-                    for (let i = 0; i < TransPerBatch; i++) {
-                        try {
-                            let txObject = await web3.eth.accounts.signTransaction({
-                                to: '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd',
-                                value: '1',
-                                chainId: 90,
-                                gas: '210000',
-                                gasPrice: '1000000000',
-                                nonce: this.nonce.get(address),
-                            }, accounts.get(address))
-                            this.nonce.set(address, this.nonce.get(address) + 1),
-                            this.sended++;
-                            batchSize++;
-                            batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
-                        } catch (e) {
-                            taskLogger.error(e.toString());
+        async sendcoin() {
+            try {
+                if (this.isAvailble) {
+                    let batch = new web3.eth.BatchRequest()
+                    let batchSize = 0;
+                    for (let address of this.availbleAccounts) {
+                        for (let i = 0; i < TransPerBatch; i++) {
+                            try {
+                                let txObject = await web3.eth.accounts.signTransaction({
+                                    to: '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd',
+                                    value: '1',
+                                    chainId: 90,
+                                    gas: '210000',
+                                    gasPrice: '1000000000',
+                                    nonce: this.nonce.get(address),
+                                }, accounts.get(address))
+                                this.nonce.set(address, this.nonce.get(address) + 1),
+                                    this.sended++;
+                                batchSize++;
+                                batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
+                            } catch (e) {
+                                taskLogger.error(e.toString());
+                            }
                         }
                     }
+                    if (batchSize > 0) {
+                        try {
+                            const batchResults = await batch.execute();
+                        } catch (e) {
+                            // console.log(e);
+                        }
+                        console.log('sended: ' + this.sended);
+                    }
                 }
-                if (batchSize > 0) {
-                  try {
-                    const batchResults = await batch.execute();
-                  } catch (e) {
-                    // console.log(e);
-                  }
-                  console.log('sended: ' + this.sended);
-                }
+            } catch (e) {
+                console.log(e);
             }
-        } catch (e) {
-            console.log(e);
+        }
+
+        async start() {
+            for (let address of accounts.keys()) {
+                await this.refreshNonce(address);
+            }
+            for (let address of accounts.keys()) {
+                this.availbleAccounts.add(address);
+            }
+            console.log(this.nonce);
+            this.checkSyncing();
+            this.checkNode();
+            // await this.refreshAvailbleAddress()
+            // console.log(this.availbleAccounts);
+            // setInterval(this.refreshAvailbleAddress.bind(this), 1000)
+            setInterval(this.checkSyncing.bind(this), 10000)
+            setInterval(this.checkNode.bind(this), CheckNodePeriod);
+            setInterval(this.sendcoin.bind(this), SendcoinPeriod);
         }
     }
 
-    async start() {
-        for (let address of accounts.keys()) {
-            await this.refreshNonce(address);
-        }
-        for (let address of accounts.keys()) {
-          this.availbleAccounts.add(address);
-        }
-        console.log(this.nonce);
-        this.checkSyncing();
-        this.checkNode();
-        // await this.refreshAvailbleAddress()
-        // console.log(this.availbleAccounts);
-        // setInterval(this.refreshAvailbleAddress.bind(this), 1000)
-        setInterval(this.checkSyncing.bind(this), 10000)
-        setInterval(this.checkNode.bind(this), CheckNodePeriod);
-        setInterval(this.sendcoin.bind(this), SendcoinPeriod);
-    }
-}
-
-var task = new RepeatBatchSendCoin()
-task.start()
+    var task = new RepeatBatchSendCoin()
+    task.start()
