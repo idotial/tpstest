@@ -66,11 +66,11 @@ class RepeatBatchSendCoin {
         this.uptime += CheckNodePeriod;
         let status = await txPool.getStatus();
         console.log(status);
-        if (status.pending + status.queued > 7000) {
+        if (status.queued > 300) {
             console.log(new Date() + ": task fail");
             process.exit(1);
         }
-        if (status.pending + status.queued > 3000) {
+        if (status.queued > 30) {
             // if (this.intervalId != null) {
             //   clearInterval(this.intervalId)
             //   this.intervalId = null;
