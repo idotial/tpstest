@@ -13,6 +13,8 @@ const TransPerBatch = 50;
 const CheckNodePeriod = 2000;
 const SendcoinPeriod = 299;
 const TaskRestartPeriod = 2 * 60 * 60 * 1000;
+var baseTxpoolGoal = 7000;
+const TxpoolGoal = baseTxpoolGoal * (1 + Math.Random)
 
 class RepeatBatchSendCoin {
     constructor() {
@@ -66,11 +68,11 @@ class RepeatBatchSendCoin {
         this.uptime += CheckNodePeriod;
         let status = await txPool.getStatus();
         console.log(status);
-        if (status.queued > 300) {
+        if (status.queued > 3000) {
             console.log(new Date() + ": task fail");
             process.exit(1);
         }
-        if (status.queued > 30) {
+        if (status.pending > TxpoolGoal || status.queued > 300) {
             // if (this.intervalId != null) {
             //   clearInterval(this.intervalId)
             //   this.intervalId = null;
