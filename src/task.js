@@ -137,12 +137,13 @@ class RepeatBatchSendCoin {
         for (let address of accounts.keys()) {
             await this.refreshNonce(address);
         }
+
         for (let address of accounts.keys()) {
             this.availbleAccounts.add(address);
         }
-        console.log(this.nonce);
-        this.checkSyncing();
-        this.checkNode();
+        console.log("finshed nonce:", this.nonce);
+        await this.checkSyncing();
+        await this.checkNode();
         // await this.refreshAvailbleAddress()
         // console.log(this.availbleAccounts);
         // setInterval(this.refreshAvailbleAddress.bind(this), 1000)
