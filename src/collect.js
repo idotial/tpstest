@@ -66,7 +66,7 @@ class RepeatBatchSendCoin {
         }
         console.log("finshed nonce:", this.nonce);
         // await this.checkSyncing();
-        await this.checkNode();
+        // await this.checkNode();
         // await this.refreshAvailbleAddress()
         // console.log(this.availbleAccounts);
         // setInterval(this.refreshAvailbleAddress.bind(this), 1000)
