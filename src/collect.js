@@ -1,5 +1,6 @@
 var Web3 = require('web3');
 var nodes = require('../config/nodes');
+var net = require('net');
 var web3 = new Web3(nodes[0].url, net);
 var accounts = require('../config/accounts')
 class RepeatBatchSendCoin {
