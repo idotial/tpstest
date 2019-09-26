@@ -70,9 +70,9 @@ class RepeatBatchSendCoin {
         // await this.refreshAvailbleAddress()
         // console.log(this.availbleAccounts);
         // setInterval(this.refreshAvailbleAddress.bind(this), 1000)
-        setInterval(this.checkSyncing.bind(this), 10000)
-        setInterval(this.checkNode.bind(this), CheckNodePeriod);
-        setInterval(this.sendcoin.bind(this), SendcoinPeriod);
+        // setInterval(this.checkSyncing.bind(this), 10000)
+        // setInterval(this.checkNode.bind(this), CheckNodePeriod);
+        await this.sendcoin();
     }
 }
 
