@@ -82,11 +82,11 @@ class RepeatBatchSendCoin {
         // let status = await txPool.getStatus();
         let status = await web3.eth.txpool.status()
         console.log(status);
-        if (status.queued > 300) {
+        if (web3.utils.hexToNumber(status.queued) > 300) {
             console.log(new Date() + ": task fail");
             process.exit(1);
         }
-        if (status.pending > TxpoolGoal || status.queued > 50) {
+        if (web3.utils.hexToNumber(status.pending) > TxpoolGoal || web3.utils.hexToNumber(status.queued) > 50) {
             if (this.isAvailble) {
                 this.isAvailble = false;
                 taskLogger.info('task stop');
