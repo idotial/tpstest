@@ -7,7 +7,20 @@ var accounts = require('../config/accounts')
 var nodes = require('../config/nodes')
 var { TxPool } = require('web3-eth-txpool');
 var web3 = new Web3(nodes[0].url, net);
-const txPool = new TxPool(web3.currentProvider);
+web3.eth.extend({
+  property: 'txpool',
+  methods: [{
+    name: 'content',
+    call: 'txpool_content'
+  },{
+    name: 'inspect',
+    call: 'txpool_inspect'
+  },{
+    name: 'status',
+    call: 'txpool_status'
+  }]
+});
+// const txPool = new TxPool(web3.currentProvider);
 const PowerLimit = 50515982000000000;
 const TransPerBatch = 50;
 const CheckNodePeriod = 2000;
@@ -66,18 +79,14 @@ class RepeatBatchSendCoin {
             process.exit(1);
         }
         this.uptime += CheckNodePeriod;
-        let status = await txPool.getStatus();
+        // let status = await txPool.getStatus();
+        let status = await web3.eth.txpool.status()
         console.log(status);
         if (status.queued > 300) {
             console.log(new Date() + ": task fail");
             process.exit(1);
         }
         if (status.pending > TxpoolGoal || status.queued > 50) {
-            // if (this.intervalId != null) {
-            //   clearInterval(this.intervalId)
-            //   this.intervalId = null;
-            //   taskLogger.info('task stop');
-            // }
             if (this.isAvailble) {
                 this.isAvailble = false;
                 taskLogger.info('task stop');
