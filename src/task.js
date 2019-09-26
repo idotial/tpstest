@@ -11,9 +11,9 @@ const txPool = new TxPool(web3.currentProvider);
 const PowerLimit = 50515982000000000;
 const TransPerBatch = 50;
 const CheckNodePeriod = 2000;
-const SendcoinPeriod = 299;
+const SendcoinPeriod = 501;
 const TaskRestartPeriod = 2 * 60 * 60 * 1000;
-var baseTxpoolGoal = 7000;
+var baseTxpoolGoal = 800;
 const TxpoolGoal = baseTxpoolGoal * (1 + Math.Random)
 
 class RepeatBatchSendCoin {
@@ -68,11 +68,11 @@ class RepeatBatchSendCoin {
         this.uptime += CheckNodePeriod;
         let status = await txPool.getStatus();
         console.log(status);
-        if (status.queued > 3000) {
+        if (status.queued > 300) {
             console.log(new Date() + ": task fail");
             process.exit(1);
         }
-        if (status.pending > TxpoolGoal || status.queued > 300) {
+        if (status.pending > TxpoolGoal || status.queued > 50) {
             // if (this.intervalId != null) {
             //   clearInterval(this.intervalId)
             //   this.intervalId = null;
@@ -103,7 +103,7 @@ class RepeatBatchSendCoin {
                     for (let i = 0; i < TransPerBatch; i++) {
                         try {
                             let txObject = await web3.eth.accounts.signTransaction({
-                                to: '0xAABe8da4AF6CCC2d8DeF6F4e22DcE92B0cc845bd',
+                                to: '0x763edBB7A33c2D9Ed6775D5b24225A469673BE99',
                                 value: '1',
                                 chainId: 90,
                                 gas: '210000',
