@@ -124,7 +124,7 @@ class RepeatBatchSendCoin {
                             batchSize++;
                             batch.add(web3.eth.sendSignedTransaction.request(txObject.rawTransaction))
                         } catch (e) {
-                            taskLogger.error(e.toString());
+                            console.error(e.toString());
                         }
                     }
                 }
@@ -153,9 +153,6 @@ class RepeatBatchSendCoin {
         console.log("finshed nonce:", this.nonce);
         await this.checkSyncing();
         await this.checkNode();
-        // await this.refreshAvailbleAddress()
-        // console.log(this.availbleAccounts);
-        // setInterval(this.refreshAvailbleAddress.bind(this), 1000)
         setInterval(this.checkSyncing.bind(this), 10000)
         setInterval(this.checkNode.bind(this), CheckNodePeriod);
         setInterval(this.sendcoin.bind(this), SendcoinPeriod);
