@@ -4,7 +4,14 @@ var net = require('net');
 var web3 = new Web3(nodes[0].url, net);
 var accounts = require('../config/accounts')
 class RepeatBatchSendCoin {
-
+  constructor() {
+      this.availbleAccounts = new Set();
+      this.power = new Map();
+      this.nonce = new Map();
+      this.sended = 0;
+      this.isAvailble = true;
+      this.uptime = 0;
+  }
     async refreshNonce(address) {
         let nonce = await web3.eth.getTransactionCount(address, 'pending');
         this.nonce.set(address, nonce);
